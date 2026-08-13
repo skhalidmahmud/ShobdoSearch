@@ -5,6 +5,12 @@
 
 A rule-based and dictionary-validated NLP tool designed to convert Romanized Bengali (Banglish) into original Bangla script. This project leverages recursive phonetic mapping and automated dictionary validation to ensure high accuracy in transliteration.
 
+## Banglish → বাংলা Unicode Converter
+
+Convert Banglish text into accurate Bangla Unicode using phonetic matching, dictionary validation, and intelligent candidate generation.
+
+**[🚀 Live Demo](https://shobdosearch.onrender.com)** · **[📖 API Docs](https://shobdosearch.onrender.com/docs)** · **[⚡ Quick Start](#quick-start)**
+
 ## 🚀 Key Features
 - **Modern Web UI**: A stunning glassmorphic interface for real-time conversion.
 - **FastAPI Backend**: High-performance API for integration into other apps.
