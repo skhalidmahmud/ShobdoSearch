@@ -18,7 +18,7 @@ A rule-based and dictionary-validated NLP tool designed to convert Romanized Ben
 ### 1. Clone the repository
 ```bash
 git clone https://github.com/skhalidmahmud/ShobdoSearch.git
-cd From-Banglish-word-original-Bangla-word-finding
+cd ShobdoSearch
 ```
 
 ### 2. Start the Web App (Recommended)
