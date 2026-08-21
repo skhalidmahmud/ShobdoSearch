@@ -4,6 +4,13 @@ All notable changes to this project are documented in this file.
 
 ---
 
+## [2.0.2] - 2026-08-22
+
+### Fixed
+- Replaced all local `file:///` paths in markdown documentation with standard public GitHub repository links.
+
+---
+
 ## [2.0.1] - 2026-08-22
 
 ### Changed
@@ -16,9 +23,9 @@ All notable changes to this project are documented in this file.
 
 ### Added
 - **Dynamic Vowel-Expansion Engine**: Algorithmic recovery for consonant-heavy chat shorthand and abbreviations (`tmi`, `vlo`, `kmn`, `amr`, `tmr`, `apnr`, `bndhu`, `rsta`, `khbr`).
-- **Comprehensive Base Vocabulary**: Expanded and alphabetically sorted [`data/ben2bn.csv`](file:///c:/Users/Khalid/OneDrive/Desktop/Git%20clone/Antigravity/ShobdoSearch/data/ben2bn.csv) to **2,770+** high-frequency words covering 80%+ daily conversational Bengali.
+- **Comprehensive Base Vocabulary**: Expanded and alphabetically sorted [`data/ben2bn.csv`](https://github.com/skhalidmahmud/ShobdoSearch/blob/main/data/ben2bn.csv) to **2,770+** high-frequency words covering 80%+ daily conversational Bengali.
 - **Extended Phonetic Rules**: Added missing phonemes (`v`, `f`, `w`, `x`, `z`, `q`) and digraph conjuncts (`bd`, `bdh`, `kt`, `st`) to `data/banGenerator.csv`.
-- **Comprehensive Test Suite**: Added [`verify.py`](file:///c:/Users/Khalid/OneDrive/Desktop/Git%20clone/Antigravity/ShobdoSearch/verify.py) with 41 core test cases (100% pass rate).
+- **Comprehensive Test Suite**: Added [`verify.py`](https://github.com/skhalidmahmud/ShobdoSearch/blob/main/verify.py) with 41 core test cases (100% pass rate).
 
 ### Changed
 - **In-Memory Cache Architecture**: Replaced disk-writing in `converter.py` with in-memory `self.b2b_cache` to prevent dataset pollution during runtime.

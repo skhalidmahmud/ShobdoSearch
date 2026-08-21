@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "shobdosearch"
-version = "2.0.1"
+version = "2.0.2"
 description = "High-accuracy Banglish-to-Bangla NLP transliteration engine with dynamic shorthand recovery"
 readme = "README.md"
 authors = [

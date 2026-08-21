@@ -13,7 +13,7 @@ An intelligent, rule-based, and dictionary-validated NLP engine designed to conv
 ## 🚀 Key Features
 
 - **Dynamic Vowel-Expansion & Shorthand Recovery**: Seamlessly transliterates informal chat shorthand (e.g., `tmi` → **তুমি**, `vlo` → **ভালো**, `kmn` → **কেমন**, `amr` → **আমার**, `bndhu` → **বন্ধু**, `rsta` → **রাস্তা**).
-- **Curated 2,770+ Baseline Dictionary**: Pre-indexed and alphabetically sorted mapping in [`data/ben2bn.csv`](file:///c:/Users/Khalid/OneDrive/Desktop/Git%20clone/Antigravity/ShobdoSearch/data/ben2bn.csv) covering top 80%+ everyday Bengali vocabulary.
+- **Curated 2,770+ Baseline Dictionary**: Pre-indexed and alphabetically sorted mapping in [`data/ben2bn.csv`](https://github.com/skhalidmahmud/ShobdoSearch/blob/main/data/ben2bn.csv) covering top 80%+ everyday Bengali vocabulary.
 - **Weighted Multi-Tier Dictionary**: Validates candidates against 464,411 words across 4 frequency tiers for maximum accuracy.
 - **Modern Glassmorphic Web UI**: Responsive web app with live transliteration, history, voice typing, and clipboard utilities.
 - **FastAPI Backend**: Clean RESTful endpoints (`/convert`, `/stats`) for integration into web, mobile, and desktop applications.
