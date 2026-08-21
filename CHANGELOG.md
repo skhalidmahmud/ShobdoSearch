@@ -4,7 +4,15 @@ All notable changes to this project are documented in this file.
 
 ---
 
-## [1.0.0] - 2026-08-22
+## [2.0.1] - 2026-08-22
+
+### Changed
+- Updated PyPI package documentation with official download/version badges and pip usage guide.
+- Bumped version to `2.0.1` for PyPI release parity.
+
+---
+
+## [2.0.0] - 2026-08-22
 
 ### Added
 - **Dynamic Vowel-Expansion Engine**: Algorithmic recovery for consonant-heavy chat shorthand and abbreviations (`tmi`, `vlo`, `kmn`, `amr`, `tmr`, `apnr`, `bndhu`, `rsta`, `khbr`).
