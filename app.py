@@ -40,8 +40,8 @@ async def get_stats():
     return {
         "known_mappings": len(converter.b2b_map),
         "generator_rules": len(converter.generator_map),
-        "dictionaries_loaded": len(converter.word_lists),
-        "total_words_in_dict": sum(len(wlist) for wlist in converter.word_lists)
+        "dictionaries_loaded": 4,
+        "total_words_in_dict": len(converter.word_weights)
     }
 
 # Serve static files (Frontend)

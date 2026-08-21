@@ -102,6 +102,8 @@ class BanglishConverter:
         weight = self.word_weights.get(word, 5)
         if len(word) == 1:
             weight += 2
+        if word.endswith(self.hasanta):
+            weight += 3
         return weight
 
     def convert(self, banglish_word):
@@ -111,9 +113,11 @@ class BanglishConverter:
 
         banglish_word = banglish_word.lower()
         
-        # Step 1: Check if we already know this exact word
+        # Step 1: Check if we already know this exact word (known map or in-memory cache)
         if banglish_word in self.b2b_map:
             return self.b2b_map[banglish_word]
+        if hasattr(self, 'b2b_cache') and banglish_word in self.b2b_cache:
+            return self.b2b_cache[banglish_word]
 
         # Step 2: Split and Generate candidates
         phonemes = self.split_banglish(banglish_word)
@@ -137,7 +141,7 @@ class BanglishConverter:
 
                     # Special logic for 'a' or 'o' -> 'অ' (Implicit vowel after consonant)
                     current_opt = opt
-                    if (p == 'a' or p == 'o') and opt == 'অ' and last_was_cons:
+                    if (p == 'a' or p == 'o') and opt == 'অ' and last_was_cons and not cand_str.endswith(self.hasanta):
                         current_opt = "" # Implicit
                     
                     # Option A: Standard concatenation
@@ -157,20 +161,21 @@ class BanglishConverter:
                 candidates = candidates[:10000]
 
         # Step 3: Find the first candidate that is a real Bangla word
-        # We use frequency weights and length as heuristics.
+        # We use frequency weights and heuristics.
         valid_candidates = []
         for cand_str, _ in candidates:
             if self.is_valid_word(cand_str):
                 valid_candidates.append(cand_str)
         
         if valid_candidates:
-            # Pick the candidate with the best priority (lowest weight, then shortest)
+            # Pick the candidate with the best priority (lowest weight)
             best = min(valid_candidates, key=lambda x: self.get_word_priority(x))
             self.save_new_mapping(banglish_word, best)
             return best
         
         # If nothing found in dictionary, return the first "best guess"
-        return candidates[0][0] if candidates else banglish_word
+        best_guess = candidates[0][0] if candidates else banglish_word
+        return best_guess
 
     def convert_sentence(self, text):
         """Converts a full sentence of Banglish text to Bangla."""
@@ -186,16 +191,9 @@ class BanglishConverter:
         return "".join(result)
 
     def save_new_mapping(self, eng, ban):
-        b2b_path = os.path.join(self.data_dir, 'ben2bn.csv')
-        # Only add if not already present
-        if eng not in self.b2b_map:
-            self.b2b_map[eng] = ban
-            try:
-                with open(b2b_path, 'a', encoding='utf-8-sig', newline='') as f:
-                    writer = csv.writer(f)
-                    writer.writerow([eng, ban])
-            except Exception as e:
-                print(f"Error saving mapping: {e}")
+        if not hasattr(self, 'b2b_cache'):
+            self.b2b_cache = {}
+        self.b2b_cache[eng] = ban
 
 # Testing the logic
 if __name__ == "__main__":
