@@ -20,6 +20,7 @@ class BanglishConverter:
         # Bengali Vowels (phonetic keys)
         self.vowels = {'a', 'aa', 'i', 'ii', 'u', 'uu', 'oo', 'ri', 'e', 'oi', 'o', 'ou'}
         self.hasanta = '্'
+        self.dependent_vowels = {'া', 'ি', 'ী', 'ু', 'ূ', 'ৃ', 'ে', 'ৈ', 'ো', 'ৌ', 'ং', 'ঃ', 'ঁ'}
         self.load_data()
 
     def load_data(self):
@@ -96,11 +97,12 @@ class BanglishConverter:
         return hasattr(self, 'word_weights') and word in self.word_weights
 
     def get_word_priority(self, word):
-        """Returns a priority score (lower is better). Weight is primary, length is secondary."""
+        """Returns a priority score (lower is better)."""
         # Weight 1-4 from dictionaries. If not found, weight 5 (guess).
         weight = self.word_weights.get(word, 5)
-        # Use a tuple for sorting: (Weight, Length)
-        return (weight, len(word))
+        if len(word) == 1:
+            weight += 2
+        return weight
 
     def convert(self, banglish_word):
         # Handle empty or whitespace
@@ -129,9 +131,13 @@ class BanglishConverter:
             
             for cand_str, last_was_cons in candidates:
                 for opt in options:
-                    # Special logic for 'a' -> 'অ' (Implicit vowel after consonant)
+                    # Prevent dependent vowels at the beginning of a word
+                    if cand_str == "" and opt in self.dependent_vowels:
+                        continue
+
+                    # Special logic for 'a' or 'o' -> 'অ' (Implicit vowel after consonant)
                     current_opt = opt
-                    if p == 'a' and opt == 'অ' and last_was_cons:
+                    if (p == 'a' or p == 'o') and opt == 'অ' and last_was_cons:
                         current_opt = "" # Implicit
                     
                     # Option A: Standard concatenation
