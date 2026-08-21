@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shobdosearch"
+version = "2.0.0"
+description = "High-accuracy Banglish-to-Bangla NLP transliteration engine with dynamic shorthand recovery"
+readme = "README.md"
+authors = [
+    { name = "Khalid Mahmud" }
+]
+license = { text = "MIT" }
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Text Processing :: Linguistic",
+    "Natural Language :: Bengali"
+]
+dependencies = [
+    "fastapi>=0.100.0",
+    "uvicorn>=0.20.0",
+    "pydantic>=2.0.0"
+]
+
+[tool.setuptools]
+py-modules = ["converter", "app", "run", "verify"]
+
+[tool.setuptools.package-data]
+"*" = ["data/*", "static/*"]
+
+[project.urls]
+"Homepage" = "https://github.com/skhalidmahmud/ShobdoSearch"
+"Bug Tracker" = "https://github.com/skhalidmahmud/ShobdoSearch/issues"

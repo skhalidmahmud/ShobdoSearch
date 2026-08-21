@@ -1,0 +1,8 @@
+include README.md
+include LICENSE
+include ARCHITECTURE.md
+include CHANGELOG.md
+include DATASET.md
+include ROADMAP.md
+recursive-include data *
+recursive-include static *
