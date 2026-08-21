@@ -1,7 +1,9 @@
 # 🇧🇩 Banglish-to-Bangla: Phonetic Smart Converter
 
+[![PyPI version](https://img.shields.io/pypi/v/shobdosearch.svg)](https://pypi.org/project/shobdosearch/)
+[![PyPI Downloads](https://img.shields.io/pypi/dm/shobdosearch.svg)](https://pypi.org/project/shobdosearch/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Tests](https://img.shields.io/badge/Tests-41%2F41%20Passing-brightgreen.svg)](#testing--verification)
 
 An intelligent, rule-based, and dictionary-validated NLP engine designed to convert Romanized Bengali (Banglish) into authentic Bangla Unicode script. Features dynamic vowel-expansion for informal texting/chat shorthand, weighted multi-dictionary validation across **464,000+ words**, and an alphabetically sorted curated base dictionary of **2,770+ words** covering 80%+ of daily conversational Bengali.
@@ -20,9 +22,23 @@ An intelligent, rule-based, and dictionary-validated NLP engine designed to conv
 
 ---
 
-## 💻 Installation & Quick Start
+## 💻 Installation & Usage
 
-### 1. Clone the Repository
+### 1. Install via pip (Recommended)
+```bash
+pip install shobdosearch
+```
+
+**Python Usage:**
+```python
+from converter import BanglishConverter
+
+conv = BanglishConverter()
+print(conv.convert_sentence("tmi kmn aso? amr vlo lagse."))
+# আউটপুট: তুমি কেমন আছো? আমার ভালো লাগছে.
+```
+
+### 2. Clone the Repository
 ```bash
 git clone https://github.com/skhalidmahmud/ShobdoSearch.git
 cd ShobdoSearch
