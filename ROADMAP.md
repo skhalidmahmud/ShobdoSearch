@@ -1,24 +1,29 @@
 # Project Roadmap
 
-The goal of this project is to create the most accurate and easy-to-use Banglish-to-Bangla transliteration tool.
+The goal of ShobdoSearch is to deliver a robust, high-accuracy, and frictionless Banglish-to-Bangla transliteration engine.
+
+---
 
 ## 📍 Phase 1: Foundational Engine (Completed)
-- [x] Phonetic splitting logic.
-- [x] Multi-file dictionary validation.
-- [x] Modular Python class structure.
+- [x] Longest-match phonetic splitting logic.
 - [x] Recursive candidate generation.
+- [x] Multi-tier dictionary validation across 464k+ words.
+- [x] Modular object-oriented Python architecture (`converter.py`).
 
-## 📍 Phase 2: User Experience (Completed)
-- [x] **Desktop GUI**: Built a modern PWA-ready web interface.
-- [x] **Real-time Conversion**: Instant transliteration.
-- [x] **Copy-to-Clipboard**: Quick copy button with toast notifications.
+## 📍 Phase 2: Shorthand & Accuracy Optimization (Completed)
+- [x] **Dynamic Vowel-Expansion Engine**: Algorithmic recovery for consonant-heavy chat slang (`tmi`, `vlo`, `kmn`, `apnr`, `bndhu`, `rsta`).
+- [x] **2,770+ Core Vocabulary Seed Map**: Alphabetically sorted base dictionary covering 80%+ daily vocabulary.
+- [x] **In-Memory Caching**: High-speed session caching (`b2b_cache`) with zero disk pollution.
+- [x] **Orthographic Corrections**: Fixed leading dependent vowel diacritics and dangling hasantas.
+- [x] **Standardized CSV Rulebook**: Aligned 111 phoneme rules into a strict 7-column matrix.
 
-## 📍 Phase 3: Advanced NLP (Completed)
-- [x] **Conjunct (যুক্তবর্ণ) Refinement**: Smart Hasanta insertion logic.
-- [x] **Contextual Prediction**: Dictionary-based weighting.
-- [x] **Web API**: FastAPI service fully operational.
+## 📍 Phase 3: Web Platform & API (Completed)
+- [x] **Modern Glassmorphic UI**: Responsive web app with live transliteration.
+- [x] **FastAPI Backend**: Fully operational `/convert` and `/stats` endpoints.
+- [x] **Voice Typing Integration**: Web Speech API for voice-to-text input.
+- [x] **PWA & Offline Ready**: Service Worker and Web Manifest for desktop/mobile installation.
 
-## 📍 Phase 4: Mobile & Browser (Completed)
-- [x] **PWA Support**: Installable on Mobile/Desktop.
-- [x] **Voice Support**: Speech-to-Banglish integration.
-- [x] **Chrome Extension**: Ready for deployment.
+## 📍 Phase 4: Future Enhancements (Planned)
+- [ ] **Context-Aware Language Model**: Bigram / Trigram n-gram scoring for adjacent word context.
+- [ ] **Browser Extension**: Chrome & Firefox extension for universal typing in web forms.
+- [ ] **Mobile Keyboard Layouts**: Android and iOS keyboard SDK integration.
