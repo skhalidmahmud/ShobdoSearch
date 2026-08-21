@@ -3,5 +3,4 @@ __pycache__/
 .ipynb_checkpoints/
 .vscode/
 .env
-data/ben2bn.csv
 extra/
