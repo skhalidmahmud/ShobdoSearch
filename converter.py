@@ -106,6 +106,80 @@ class BanglishConverter:
             weight += 3
         return weight
 
+    def expand_shorthand(self, word):
+        """Generates vowel-inserted candidate variants for consonant-heavy chat shorthand."""
+        vowels = {'a', 'e', 'i', 'o', 'u'}
+        vowel_inserts = ['a', 'o', 'e', 'u', 'i']
+        n = len(word)
+        if n <= 1:
+            return []
+
+        digraphs = {
+            'sh', 'kh', 'th', 'ch', 'gh', 'dh', 'bh', 'ph', 'ng', 'nd',
+            'nt', 'st', 'kk', 'tt', 'dd', 'pp', 'bb', 'mm', 'nn', 'll',
+            'ss', 'bd', 'kt', 'sk', 'sp', 'sm', 'sn', 'tr', 'dr', 'pr',
+            'br', 'gr', 'kr', 'kl', 'gl', 'mr', 'sr', 'sw'
+        }
+
+        cons_indices = []
+        i = 0
+        while i < n - 1:
+            if word[i:i+2] in digraphs:
+                i += 2
+                continue
+            c1, c2 = word[i], word[i + 1]
+            if c1 not in vowels and c2 not in vowels:
+                cons_indices.append(i + 1)
+            i += 1
+
+        if not cons_indices:
+            return []
+
+        target_indices = cons_indices[:2]
+        candidates = [word]
+        for ins_pos in reversed(target_indices):
+            new_cands = []
+            for cand in candidates:
+                new_cands.append(cand)
+                for v in vowel_inserts:
+                    new_cands.append(cand[:ins_pos] + v + cand[ins_pos:])
+            candidates = new_cands
+
+        return [c for c in candidates if c != word]
+
+    def _generate_raw_candidates(self, banglish_word):
+        """Splits banglish word and builds Bangla candidates using phonetic rules."""
+        phonemes = self.split_banglish(banglish_word)
+        if not phonemes:
+            return []
+
+        candidates = [("", False)]
+        for p in phonemes:
+            new_candidates = []
+            options = self.generator_map.get(p, [p])
+            is_curr_cons = self.is_consonant(p)
+            
+            for cand_str, last_was_cons in candidates:
+                for opt in options:
+                    if cand_str == "" and opt in self.dependent_vowels:
+                        continue
+
+                    current_opt = opt
+                    if (p == 'a' or p == 'o') and opt == 'অ' and last_was_cons and not cand_str.endswith(self.hasanta):
+                        current_opt = ""
+                    
+                    new_candidates.append((cand_str + current_opt, is_curr_cons))
+                    
+                    if last_was_cons and is_curr_cons:
+                        if not cand_str.endswith(self.hasanta):
+                            new_candidates.append((cand_str + self.hasanta + opt, is_curr_cons))
+            
+            candidates = new_candidates
+            if len(candidates) > 5000:
+                candidates = candidates[:5000]
+
+        return [c[0] for c in candidates]
+
     def convert(self, banglish_word):
         # Handle empty or whitespace
         if not banglish_word or not banglish_word.strip():
@@ -119,68 +193,40 @@ class BanglishConverter:
         if hasattr(self, 'b2b_cache') and banglish_word in self.b2b_cache:
             return self.b2b_cache[banglish_word]
 
-        # Step 2: Split and Generate candidates
-        phonemes = self.split_banglish(banglish_word)
-        if not phonemes:
-            return banglish_word
-
-        # Advanced candidate generation with conjunct support
-        # candidates store tuple: (string, last_phoneme_was_consonant)
-        candidates = [("", False)] 
-        
-        for p in phonemes:
-            new_candidates = []
-            options = self.generator_map.get(p, [p])
-            is_curr_cons = self.is_consonant(p)
-            
-            for cand_str, last_was_cons in candidates:
-                for opt in options:
-                    # Prevent dependent vowels at the beginning of a word
-                    if cand_str == "" and opt in self.dependent_vowels:
-                        continue
-
-                    # Special logic for 'a' or 'o' -> 'অ' (Implicit vowel after consonant)
-                    current_opt = opt
-                    if (p == 'a' or p == 'o') and opt == 'অ' and last_was_cons and not cand_str.endswith(self.hasanta):
-                        current_opt = "" # Implicit
-                    
-                    # Option A: Standard concatenation
-                    new_candidates.append((cand_str + current_opt, is_curr_cons))
-                    
-                    # Option B: Try Conjunct (Add Hasanta) if both are consonants
-                    if last_was_cons and is_curr_cons:
-                        # Bengali conjuncts are formed by Consonant + Hasanta + Consonant
-                        # Note: Some phonemes in generator_map might already end in Hasanta
-                        if not cand_str.endswith(self.hasanta):
-                            new_candidates.append((cand_str + self.hasanta + opt, is_curr_cons))
-            
-            # Update and prune candidates to avoid explosion
-            candidates = new_candidates
-            if len(candidates) > 10000:
-                # Prioritize shorter ones or just slice
-                candidates = candidates[:10000]
-
-        # Step 3: Find the first candidate that is a real Bangla word
-        # We use frequency weights and heuristics.
+        # Step 2: Direct candidate generation
+        raw_candidates = self._generate_raw_candidates(banglish_word)
         valid_candidates = []
-        for cand_str, _ in candidates:
+        for cand_str in raw_candidates:
             if self.is_valid_word(cand_str):
                 valid_candidates.append(cand_str)
-        
+
         if valid_candidates:
-            # Pick the candidate with the best priority (lowest weight)
+            best_direct = min(valid_candidates, key=lambda x: self.get_word_priority(x))
+            # If direct candidate is a high-priority match (weight <= 2), use it immediately
+            if self.get_word_priority(best_direct) <= 2:
+                self.save_new_mapping(banglish_word, best_direct)
+                return best_direct
+
+        # Step 3: Shorthand Vowel-Expansion for abbreviations/consonant clusters
+        expansions = self.expand_shorthand(banglish_word)
+        for exp_word in expansions:
+            exp_raw = self._generate_raw_candidates(exp_word)
+            for cand_str in exp_raw:
+                if self.is_valid_word(cand_str):
+                    valid_candidates.append(cand_str)
+
+        if valid_candidates:
             best = min(valid_candidates, key=lambda x: self.get_word_priority(x))
             self.save_new_mapping(banglish_word, best)
             return best
         
-        # If nothing found in dictionary, return the first "best guess"
-        best_guess = candidates[0][0] if candidates else banglish_word
+        # If nothing found in dictionary, return the best guess
+        best_guess = raw_candidates[0] if raw_candidates else banglish_word
         return best_guess
 
     def convert_sentence(self, text):
         """Converts a full sentence of Banglish text to Bangla."""
         import re
-        # Split by spaces and punctuation, but keep them
         tokens = re.split(r'(\s+|[.,!?;:])', text)
         result = []
         for token in tokens:
